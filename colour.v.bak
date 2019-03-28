@@ -1,0 +1,233 @@
+module colour
+	(
+  input clk,reset,
+  output [2:0]image,
+  output [3:0]out_g_index,
+  output [3:0]count
+	);
+ 
+ wire[2:0] image_index;	
+ wire[3:0] grid_index;
+ wire draw_enable; 
+ wire allow_next;
+ wire next_image;
+ wire assign_sel;
+
+ assign count = grid_index;
+		
+ assignImage m3(
+               .enable(draw_enable),.clk(CLOCK_50),.index_grid(grid_index),.out_select(image_index),
+                .assign_sel(assign_sel),.next(allow_next),
+					 .index_grid(out_g_index),.out_select(image)
+					 );
+ grid m2(
+        .clk(clk),.grid_index(grid_index),
+       .next(allow_next),.reset(reset),.enable_draw(draw_enable),.next_image(next_image)
+		 );
+Image m1(
+    .index(image_index),.clk(CLOCK_50),.reset(reset),
+	 .count_avacado(count_avacado),.count_apple(count_apple),.count_coconut(count_coconut),
+	 .count_kiwi(count_kiwi),.count_lemon(count_lemon),.count_peach(count_peach),.count_pear(count_pear),.count_watermelon(count_watermelon),
+	 .allow_next(next_image),.assign_sel(assign_sel)
+	);		 
+ 
+ lfsr m0 (
+     .clk(clk),.reset(reset),.index_Q(image_index),.next_image(next_image)
+	 );		
+endmodule
+
+
+
+module lfsr(input clk,reset,next_image,output reg[2:0]index_Q);
+ 
+ always@(posedge clk)
+	 begin
+	   if (reset==1)
+		 index_Q <= 3'b111;
+		else  
+		  begin
+		  if(next_image)
+		    index_Q <= {index_Q[1:0],,index_Q[1]^index_Q[2]};	
+			else index_Q <= index_Q; 
+        end		 
+	 end  
+
+endmodule
+
+module Image(
+   input [2:0]index,
+	input clk,reset,allow_next,
+	output reg [1:0]count_avacado,count_apple, count_coconut,count_kiwi,count_lemon,count_peach,
+           count_pear,count_watermelon,
+	output reg assign_sel);
+			  
+			  localparam[2:0] avacado = 3'd0,
+                 apple = 3'd1,
+					  coconut = 3'd2,
+					  kiwi = 3'd3,
+					  lemon = 3'd4,
+					  peach = 3'd5,
+					  pear = 3'd6,
+					  watermelon = 3'd7;
+
+always@(posedge clk)
+    begin
+	 if(reset)
+	 begin
+	   count_avacado = 2'b0;
+		count_apple = 2'b0;
+		count_coconut = 2'b0;
+		count_kiwi = 2'b0;
+		count_lemon = 2'b0;
+		count_peach = 2'b0;
+      count_pear= 2'b0;
+		count_watermelon= 2'b0;	 
+		assign_sel = 1'b1;
+	 end
+	 else
+	 begin
+	  if(index == avacado) 
+	    begin
+	      if (allow_next == 1'b1) count_avacado <= count_avacado +1;
+			else count_avacado <= count_avacado;
+			
+			if(count_avacado <= 2) assign_sel = 1;
+			else assign_sel = 1'b0;
+		 end		  
+	  
+	  else if (index == apple)
+	   begin
+	   	if (allow_next == 1'b1)count_apple <= count_apple +1;
+			else count_apple<= count_apple;
+				
+			if(count_apple <= 2) assign_sel = 1;
+			else assign_sel = 1'b0;
+		end
+		
+	  else if (index == coconut)
+	   begin
+	   	if (allow_next == 1'b1)count_coconut <= count_coconut+1;
+			else count_coconut <= count_coconut;
+			
+			if(count_coconut <= 2) assign_sel = 1;
+			else assign_sel = 1'b0;
+		end
+		
+	  else if (index == kiwi )
+	   begin
+         if (allow_next == 1'b1)count_kiwi <= count_kiwi +1;
+			else count_kiwi <= count_kiwi;
+			
+			if( count_kiwi <= 2) assign_sel = 1;
+			else assign_sel = 1'b0;
+		end
+		
+	  else if (index == lemon) 
+	   begin
+		   if (allow_next == 1'b1)count_lemon <= count_lemon+1;
+			else count_lemon<= count_lemon;
+			
+			if(count_lemon <= 2) assign_sel = 1;
+			else assign_sel = 1'b0;
+		end
+		
+	  else if (index == peach) 
+	    begin
+		    if (allow_next == 1'b1)count_peach <= count_peach+1;
+			else count_peach <= count_peach;
+			
+			 if(count_peach <= 2) assign_sel = 1;
+			 else assign_sel = 1'b0;
+		 end
+		 
+	  else if (index == pear) 
+	    begin
+		    if (allow_next == 1'b1)count_pear <= count_pear+1;
+			else count_pear <= count_pear;
+			
+			 if(count_pear <= 2) assign_sel = 1;
+			 else assign_sel = 1'b0;
+		 end
+		 
+	  else if (index == watermelon)
+	    begin
+		    if (allow_next == 1'b1)count_watermelon<= count_watermelon+1;
+			else count_watermelon<= count_watermelon;
+			
+			 if(count_watermelon <= 2) assign_sel = 1;
+			 else assign_sel = 1'b0;       
+		  end		 		 
+	   end
+	 
+	 end	 
+endmodule
+
+
+module grid(
+ input clk,reset,
+ input next,
+ output reg[3:0]grid_index,
+ output reg enable_draw,output reg next_image);
+ 
+ always@(posedge clk)
+   begin
+	  if(reset)
+	     begin
+	       enable_draw = 1'b0;
+		    grid_index <= 4'b0;
+			 next_image <= 1'b1;
+		   end
+	  else 
+	    begin
+	       if(grid_index <= 4'd15 )
+	        begin
+		       enable_draw = 1'b1;
+		       if (next == 1)
+				   begin
+	             grid_index <= grid_index+1; 
+					 next_image <= 1'b1;
+				   end
+			    else
+				   begin
+				    grid_index <= grid_index;
+					 next_image <= 1'b0;
+				   end
+		     end
+			else  grid_index <=4'd0;  
+	   end
+   end
+endmodule
+
+
+module assignImage(
+ input enable,clk,assign_sel,
+ input[3:0] index_grid, //grid_index
+ input [3:0] out_select, //image_index
+ output reg next,
+	 output reg[3:0]grid_index,
+	 output reg [2:0]image_index);
+	 
+	 
+ //(a,b)is the coordinate of the left-upper vertex of squre
+ 
+ always @(posedge clk)
+ begin
+	 if(enable)
+	  begin
+	   if(assign_sel) //avaliable image
+		  begin
+		    next <= 1'b0;
+		    grid_index <=index_grid;
+			 image_index <= out_select;			
+		  end
+		else next <= 1'b1;
+     end		
+ end
+ 
+ 
+endmodule
+
+
+
+
+

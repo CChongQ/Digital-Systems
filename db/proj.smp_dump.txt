@@ -1,0 +1,23 @@
+
+State Machine - |proj|control:u0|current_state
+Name current_state.S_printall current_state.S_erase_image_1 current_state.S_draw_image_2 current_state.S_flap_back_or_keep current_state.S_select_rest current_state.S_select_1 current_state.S_select_which current_state.S_select_wait current_state.S_draw_frame current_state.S_rest_frame current_state.S_erase_frame current_state.S_right current_state.S_right_wait current_state.S_left current_state.S_left_wait current_state.S_wait_for_key current_state.S_draw_first current_state.S_draw_chessboard current_state.S_memorize current_state.S_reset 
+current_state.S_reset 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+current_state.S_memorize 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 
+current_state.S_draw_chessboard 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 
+current_state.S_draw_first 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 
+current_state.S_wait_for_key 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 
+current_state.S_left_wait 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 
+current_state.S_left 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 
+current_state.S_right_wait 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 
+current_state.S_right 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 
+current_state.S_erase_frame 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 
+current_state.S_rest_frame 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 
+current_state.S_draw_frame 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 
+current_state.S_select_wait 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.S_select_which 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.S_select_1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.S_select_rest 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.S_flap_back_or_keep 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.S_draw_image_2 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.S_erase_image_1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_state.S_printall 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 

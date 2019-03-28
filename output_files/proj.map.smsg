@@ -1,0 +1,5 @@
+Warning (10268): Verilog HDL information at proj.v(735): always construct contains both blocking and non-blocking assignments File: D:/ece241/proj/proj.v Line: 735
+Warning (10268): Verilog HDL information at proj.v(849): always construct contains both blocking and non-blocking assignments File: D:/ece241/proj/proj.v Line: 849
+Warning (10268): Verilog HDL information at colour.v(72): always construct contains both blocking and non-blocking assignments File: D:/ece241/proj/colour.v Line: 72
+Warning (10268): Verilog HDL information at colour.v(173): always construct contains both blocking and non-blocking assignments File: D:/ece241/proj/colour.v Line: 173
+Warning (10268): Verilog HDL information at colour.v(262): always construct contains both blocking and non-blocking assignments File: D:/ece241/proj/colour.v Line: 262

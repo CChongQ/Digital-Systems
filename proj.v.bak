@@ -1,0 +1,176 @@
+module proj
+	(
+		CLOCK_50,						//	On Board 50 MHz
+		SW,
+		KEY,
+		HEX0,
+		// Your inputs and outputs here
+		// The ports below are for the VGA output.  Do not change.
+		VGA_CLK,   						//	VGA Clock
+		VGA_HS,							//	VGA H_SYNC
+		VGA_VS,							//	VGA V_SYNC
+		VGA_BLANK_N,						//	VGA BLANK
+		VGA_SYNC_N,						//	VGA SYNC
+		VGA_R,   						//	VGA Red[9:0]
+		VGA_G,	 						//	VGA Green[9:0]
+		VGA_B   						//	VGA Blue[9:0]
+	);
+	
+	input			   CLOCK_50;				//	50 MHz
+	// Declare your inputs and outputs here
+	// Do not change the following outputs
+	input    [9:0] SW;
+	input    [3:0] KEY;
+	output   [6:0] HEX0;
+	output			VGA_CLK;   				//	VGA Clock
+	output			VGA_HS;					//	VGA H_SYNC
+	output			VGA_VS;					//	VGA V_SYNC
+	output			VGA_BLANK_N;   		//	VGA BLANK
+	output			VGA_SYNC_N;				//	VGA SYNC
+	output	[9:0]	VGA_R;   				//	VGA Red[9:0]
+	output	[9:0]	VGA_G;	 				//	VGA Green[9:0]
+	output	[9:0]	VGA_B;   				//	VGA Blue[9:0]
+	
+	vga_adapter VGA(
+			.resetn(),
+			.clock(),
+			.colour(),
+			.x(),
+			.y(),
+			.plot(enable_vga),
+			/* Signals for the DAC to drive the monitor. */
+			.VGA_R(VGA_R),
+			.VGA_G(VGA_G),
+			.VGA_B(VGA_B),
+			.VGA_HS(VGA_HS),
+			.VGA_VS(VGA_VS),
+			.VGA_BLANK(VGA_BLANK_N),
+			.VGA_SYNC(VGA_SYNC_N),
+			.VGA_CLK(VGA_CLK));
+		defparam VGA.RESOLUTION = "320x240";
+		defparam VGA.MONOCHROME = "FALSE";
+		defparam VGA.BITS_PER_COLOUR_CHANNEL = 1;
+		defparam VGA.BACKGROUND_IMAGE = "background.mif";
+		
+		
+		
+		
+		
+		
+module control(
+    input clk,
+    input resetn,
+    input go,
+	 input plot,
+	 input clear,
+	 
+	 output reg [10:0]x_out, y_out,
+	 output reg [10:0]plot_out,
+	 output reg enable,
+	 
+	 output [4:0] state
+	 
+	 );
+	  	
+	 reg [4:0] prev_state, current_state;
+	 reg plot, enable, addSub, left, right;   //plot --- draw, enable --- 
+	 reg [1:0] numImage;
+	 wire [10:0]frame_counter, image_counter;
+	 
+	 
+    localparam  S_draw_first          = 5'd0,
+                S_wait_for_key        = 5'd1,
+                S_left                = 5'd2,
+                S_right               = 5'd3,
+                S_select              = 5'd4, //flap 
+                S_erase_frame         = 5'd5,
+					 S_draw_frame          = 5'd6,
+					 S_flap_back_or_keep   = 5'd7,
+				    S_flap_back           = 5'd8,
+				    S_keep                = 5'd9;
+	
+
+
+	 always @(*)
+    begin
+            case (current_state)
+				    S_draw_first:
+                  begin 
+							if(frame_counter < 11'd1849)      //1849 = 43 * 43
+									current_state = S_draw_first;
+								else
+									current_state = S_wait_for_key;
+						end
+				  
+				    S_wait_for_key:
+					   begin
+						   if(left)
+							   current_state = S_left;
+						   else if(right)
+							   current_state = S_right;
+							else if(select)
+							   current_state = S_select;
+						end
+						
+				    S_left:
+                  current_state = S_erase_frame;
+						
+				    S_right:
+					   current_state = S_erase_frame;
+						
+				    S_select:
+					   begin
+						   if(numImage == 2'd2)
+							   current_state = S_flap_back_or_keep;
+							else
+							   current_state = S_wait_for_key;
+						end
+				    S_erase_frame:
+					   begin 
+							if(frame_counter < 11'd1849)      //1849 = 43 * 43
+									current_state = S_draw_first;
+								else
+									current_state = S_wait_for_key;
+						end
+				    S_draw_frame:
+					   begin 
+							if(frame_counter < 11'd1849)      //1849 = 43 * 43
+									current_state = S_draw_first;
+								else
+									current_state = S_wait_for_key;
+						end
+				    S_flap_back_or_keep:
+					   begin
+						   if(same)
+							   current_state = S_keep;
+						   else if(not same)
+							   current_state = S_flap_back
+							else
+						end
+				    S_flap_back:
+					   begin
+						   if()
+						   else if()
+							else
+						end
+				    S_keep:
+					   begin
+						   if()
+						   else if()
+							else
+						end						
+		
+
+
+
+
+
+
+
+
+
+
+
+		
+		
+		
