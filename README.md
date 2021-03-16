@@ -1,7 +1,7 @@
 # Digital-Systems
 Hardware programming project using Verilog
 
-# Project information:
+## Project information:
 - Group Project with two team members
 - Topic: Flip Game
 - Details:
