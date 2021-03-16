@@ -1,4 +1,4 @@
-# Digital-Systems---Project
+# Digital-Systems
 Hardware programming project using Verilog
 
 # Project information:
